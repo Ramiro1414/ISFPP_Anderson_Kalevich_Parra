@@ -43,7 +43,6 @@ public class Aplicacion {
 		List<Tramo> result = calculo.rapido(p2, p4); 
 		
 		int tmp = 0;
-		//System.out.print(result.get(0).getParada1() + "\t");
 		for(Tramo iter : result) {
 			System.out.print(iter + "\n");
 			tmp += iter.getTiempo();
