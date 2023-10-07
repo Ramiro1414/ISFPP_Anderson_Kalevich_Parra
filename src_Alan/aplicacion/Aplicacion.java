@@ -1,6 +1,5 @@
 package aplicacion;
 
-import datos.*;
 import modelo.*;
 import net.datastructures.*;
 import negocio.Calculo;
@@ -50,7 +49,7 @@ public class Aplicacion {
 		}
 		System.out.println("\n\nEl recorido tarda " + tmp + " minutos.");
 		
-		System.out.println("Finish"); 
+		System.out.println("Finishhhhhhh"); 
 	}
 
 }
