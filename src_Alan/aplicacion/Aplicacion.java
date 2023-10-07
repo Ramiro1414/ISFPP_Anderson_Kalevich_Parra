@@ -42,6 +42,7 @@ public class Aplicacion {
 
 		List<Tramo> result = calculo.rapido(p2, p4); 
 		
+		
 		int tmp = 0;
 		for(Tramo iter : result) {
 			System.out.print(iter + "\n");

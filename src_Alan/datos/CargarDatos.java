@@ -15,6 +15,7 @@ import net.datastructures.TreeMap;
 public class CargarDatos {
 	
 	
+
 	/**
 	 * Carga todas las paradas que estan cargadas en el archivo de texto parada.txt.
 	 * 
