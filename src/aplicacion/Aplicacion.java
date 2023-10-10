@@ -6,6 +6,7 @@ import datos.*;
 import negocio.Calculo;
 import net.datastructures.TreeMap;
 
+import java.io.IOException;
 import java.util.List;
 
 import java.util.Scanner;
@@ -15,9 +16,17 @@ public class Aplicacion {
 	public static void main(String[] args) {
 		
 		
-		TreeMap<String, Parada> paradas = CargarDatos.cargarParadas("parada.txt");
-		TreeMap<String, Linea> lineas = CargarDatos.cargarLineas(paradas, "linea.txt");
-		List<Tramo> tramos = CargarDatos.cargarTramos(paradas, "tramo.txt");
+		// carga de parametros
+		try {
+			CargarParametros.parametros();
+		} catch (IOException e) {
+			System.err.print("Error al cargar parametros");
+			System.exit(-1);
+		}
+		
+		TreeMap<String, Parada> paradas = CargarDatos.cargarParadas(CargarParametros.getArchivoParada());
+		TreeMap<String, Linea> lineas = CargarDatos.cargarLineas(paradas, CargarParametros.getArchivoLinea());
+		List<Tramo> tramos = CargarDatos.cargarTramos(paradas, CargarParametros.getArchivoTramo());
 		
 		Calculo calculo = new Calculo(paradas, tramos);
 
