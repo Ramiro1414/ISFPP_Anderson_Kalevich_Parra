@@ -16,7 +16,8 @@ public class Linea {
 
 	// atributos de la clase
 	private String id; // identificador de la linea, ejemplo: L1
-	private LinkedPositionalList<Parada> paradas;
+	private LinkedPositionalList<Parada> paradasIda; 
+	private LinkedPositionalList<Parada> paradasRegreso;
 
 	/**
 	 * Constructor de la Linea
@@ -24,9 +25,10 @@ public class Linea {
 	 * @param id      identificador de la linea
 	 * @param paradas Lista de paradas de la linea
 	 */
-	public Linea(String id, LinkedPositionalList<Parada> paradas) {
+	public Linea(String id, LinkedPositionalList<Parada> paradasIda, LinkedPositionalList<Parada> paradasRegreso) {
 		this.id = id;
-		this.paradas = paradas;
+		this.paradasIda = paradasIda;
+		this.paradasRegreso = paradasRegreso;
 	}
 
 	/**
@@ -44,32 +46,28 @@ public class Linea {
 	 * @return la cantidad de paradas de la linea
 	 */
 	public int getCantParadas() {
-		return paradas.size();
+		return paradasIda.size();
+	}
+	
+	public void agregarParadaIda (Parada parada) {
+		paradasIda.addLast(parada);
+	}
+	
+	public void agregarParadaRegreso (Parada parada) {
+		paradasRegreso.addLast(parada); 
 	}
 
-	/**
-	 * Devuelve la posicion de la primer parada de la lista de paradas.
-	 * 
-	 * @return la posicion de la primer parada
-	 */
-	public Position<Parada> firstParada() {
-		return paradas.first();
+	public Parada removerParadaIda(Position<Parada> parada) {
+		return paradasIda.remove(parada);
 	}
-
-	/**
-	 * Devuelve la posicion de la siguiente parada de la lista dada una posicion que
-	 * le pasan como parametro
-	 * 
-	 * @param p Posicion de la parada que le pasan como parametro
-	 * @return Posicion de la siguiente parada
-	 */
-	public Position<Parada> getNextParada(Position<Parada> p) {
-		return paradas.after(p);
+	
+	public Parada removerParadaRegreso(Position<Parada> parada) {
+		return paradasRegreso.remove(parada); 
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, paradas);
+		return Objects.hash(id, paradasIda, paradasRegreso);
 	}
 
 	@Override
@@ -86,7 +84,7 @@ public class Linea {
 
 	@Override
 	public String toString() {
-		return "Linea [id=" + id + ", paradas=" + paradas + "]";
+		return "Linea [id=" + id + ", paradasIda=" + paradasIda + ", paradasRegreso=" + paradasRegreso + "]";
 	}
 
 }

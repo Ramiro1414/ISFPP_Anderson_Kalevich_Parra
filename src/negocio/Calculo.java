@@ -14,7 +14,7 @@ public class Calculo {
 
 	public Calculo(TreeMap<String, Parada> paradas, List<Tramo> tramos) {
 
-		colectivo = new AdjacencyMapGraph<>(false);
+		colectivo = new AdjacencyMapGraph<>(true);
 
 		// Cargar estaciones
 		vertices = new TreeMap<String, Vertex<Parada>>();
@@ -29,7 +29,7 @@ public class Calculo {
 
 	public List<Tramo> rapido(Parada estacion1, Parada estacion2) {
 		// copia grafo
-		Graph<Parada, Integer> rapido = new AdjacencyMapGraph<>(false);
+		Graph<Parada, Integer> rapido = new AdjacencyMapGraph<>(true);
 		Map<Parada, Vertex<Parada>> res = new ProbeHashMap<>();
 
 		for (Vertex<Parada> result : colectivo.vertices())

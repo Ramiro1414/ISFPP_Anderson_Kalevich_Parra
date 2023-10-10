@@ -2,33 +2,33 @@ package modelo;
 
 public class Tramo {
 
-	private Parada parada1;
-	private Parada parada2;
+	private Parada inicio;
+	private Parada fin;
 	private int tiempo;
 	private int tipo;
 
 	public Tramo(Parada parada1, Parada parada2, int tiempo, int tipo) {
 		super(); 
-		this.parada1 = parada1;
-		this.parada2 = parada2;
+		this.inicio = parada1;
+		this.fin = parada2;
 		this.tiempo = tiempo; 
 		this.tipo = tipo;
 	}
 
 	public Parada getParada1() {
-		return parada1;
+		return inicio;
 	}
 
 	public void setParada1(Parada parada1) { 
-		this.parada1 = parada1;
+		this.inicio = parada1;
 	}
  
 	public Parada getParada2() {
-		return parada2;
+		return fin;
 	}
 
 	public void setParada2(Parada parada2) {
-		this.parada2 = parada2;
+		this.fin = parada2;
 	}
 
 	public int getTiempo() {
@@ -49,7 +49,7 @@ public class Tramo {
 
 	@Override
 	public String toString() {
-		return "Tramo [parada1=" + parada1 + ", parada2=" + parada2
+		return "Tramo [parada1=" + inicio + ", parada2=" + fin
 				+ ", tiempo=" + tiempo + ", tipo=" + tipo + "]";
 	}
 	

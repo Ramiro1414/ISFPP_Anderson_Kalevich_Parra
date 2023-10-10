@@ -16,8 +16,8 @@ public class Parada {
 	// atrbutos de la clase
 	private String id; // ej: "P1"
 	private String direccion; // ej: "28 de julio, 455"
-	private LinkedPositionalList<Pasajero> pasajeros = new LinkedPositionalList<Pasajero>(); // lista de pasajeros,
-																								// inicia vacia
+	private LinkedPositionalList<Linea> lineas;
+	
 
 	/**
 	 * Constructor de la Parada
@@ -28,6 +28,7 @@ public class Parada {
 	public Parada(String id, String direccion) {
 		this.id = id;
 		this.direccion = direccion;
+		lineas = new LinkedPositionalList<Linea>();
 	}
 
 	/**
@@ -48,20 +49,14 @@ public class Parada {
 		return direccion;
 	}
 
-	/**
-	 * devuelve la cantidad de pasajeros de la parada
-	 * 
-	 * @return la cantidad de pasajeros de la parada
-	 */
-	public int getCantPasajeros() {
-		return pasajeros.size();
+	public void agregarLinea(Linea linea) {
+		lineas.addLast(linea);
 	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(direccion, id, pasajeros);
+	
+	public Linea removerLinea(Position<Linea> linea) {
+		return lineas.remove(linea); 
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -77,24 +72,5 @@ public class Parada {
 	@Override
 	public String toString() {
 		return "Parada [id=" + id + ", direccion=" + direccion + "]";
-	}
-
-	/**
-	 * Recibe la posicion de un pasajero y la remueve de la lista de pasajeros
-	 * 
-	 * @param pas Posicion del pasajero
-	 * @return Pasajero removido
-	 */
-	public Pasajero removerPasajero(Position<Pasajero> pas) {
-		return pasajeros.remove(pas);
-	}
-
-	/**
-	 * Recibe un pasajero y lo agrega a la lista de pasajeros
-	 * 
-	 * @param pas Pasajero a agregar
-	 */
-	public void agregarPasajero(Pasajero pas) {
-		pasajeros.addLast(pas);
 	}
 }

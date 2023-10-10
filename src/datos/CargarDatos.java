@@ -2,7 +2,6 @@ package datos;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +12,6 @@ import net.datastructures.LinkedPositionalList;
 import net.datastructures.TreeMap;
 
 public class CargarDatos {
-	
-	
 
 	/**
 	 * Carga todas las paradas que estan cargadas en el archivo de texto parada.txt.
@@ -54,7 +51,7 @@ public class CargarDatos {
 
 		return result;
 	}
-	
+
 	/**
 	 * Carga todas las lineas que estan cargadas en el archivo de texto linea.txt.
 	 * 
@@ -77,13 +74,29 @@ public class CargarDatos {
 			while (linea != null) {
 				String[] arr = linea.split(";");
 
-				LinkedPositionalList<Parada> p = new LinkedPositionalList<Parada>();
-				for (int i = 1; i < arr.length; i++) {
-					p.addLast(paradas.get(arr[i]));
+				LinkedPositionalList<Parada> paradasIda = new LinkedPositionalList<Parada>();
+				for (int i = 2; i < arr.length; i++) {
+					paradasIda.addLast(paradas.get(arr[i]));
 				}
-				Linea current = new Linea(arr[0], p);
-				result.put(arr[0], current);
 
+				LinkedPositionalList<Parada> paradasRegreso = new LinkedPositionalList<Parada>();
+				linea = br.readLine();
+				arr = linea.split(";");
+				for (int i = 2; i < arr.length; i++) {
+					paradasRegreso.addLast(paradas.get(arr[i]));
+				}
+
+				Linea nuevaLinea = new Linea(arr[0], paradasIda, paradasRegreso);
+				result.put(arr[0], nuevaLinea);
+
+				for(Parada parada : paradasIda) {
+					parada.agregarLinea(nuevaLinea);
+				}
+				
+				for(Parada parada : paradasRegreso) {
+					parada.agregarLinea(nuevaLinea);
+				}
+				
 				linea = br.readLine();
 			}
 			br.close();
@@ -95,27 +108,33 @@ public class CargarDatos {
 
 		return result;
 	}
-	
-	public static List<Tramo> cargarTramos(String fileName,
-			TreeMap<String, Parada> estaciones) throws FileNotFoundException {
+
+	public static List<Tramo> cargarTramos(TreeMap<String, Parada> paradas, String tramosFile) {
+
 		Scanner read;
 		List<Tramo> tramos = new ArrayList<Tramo>();
-		
-			read = new Scanner(new File(fileName));
+
+		try {
+
+			read = new Scanner(new File(tramosFile));
 			read.useDelimiter("\\s*;\\s*");
 			Parada v1, v2;
 			int tiempo, tipo;
 			while (read.hasNext()) {
-				v1 = estaciones.get(read.next());
-				v2 = estaciones.get(read.next());
+				v1 = paradas.get(read.next());
+				v2 = paradas.get(read.next());
 				tiempo = read.nextInt();
 				tipo = read.nextInt();
 				tramos.add(0, new Tramo(v1, v2, tiempo, tipo));
 			}
 			read.close();
-		
+
+		} catch (Exception e) {
+			System.err.println(e);
+			System.exit(-1);
+		}
+
 		return tramos;
 	}
-	
 
 }
