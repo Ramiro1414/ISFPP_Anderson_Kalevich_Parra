@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import modelo.*;
-
 import net.datastructures.*;
+import controlador.Coordinador;
 
 public class Calculo {
 
 	private Graph<Parada, Tramo> colectivo;
 	private TreeMap<String, Vertex<Parada>> vertices;
+	private Coordinador coordinador;
 
-	public Calculo(TreeMap<String, Parada> paradas, List<Tramo> tramos) {
+	public Calculo() {
+	}
+
+	public void iniciarCalculo(Map<String, Parada> paradas, List<Tramo> tramos) {
 
 		colectivo = new AdjacencyMapGraph<>(true);
 
@@ -25,7 +29,7 @@ public class Calculo {
 		for (Tramo tramo : tramos)
 			colectivo.insertEdge(vertices.get(tramo.getParada1().getId()), vertices.get(tramo.getParada2().getId()),
 					tramo);
-	} 
+	}
 
 	public List<Tramo> rapido(Parada estacion1, Parada estacion2) {
 		// copia grafo
@@ -59,4 +63,7 @@ public class Calculo {
 		return tramos;
 	}
 
+	public void setCoordinador(Coordinador coordinador) {
+		this.coordinador = coordinador;
+	}
 }

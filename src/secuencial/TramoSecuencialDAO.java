@@ -12,15 +12,15 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 import secuencial.ParadaSecuencialDAO;
-import dao.MapaDAO;
-import dao.ListaDAO;
+import dao.TramoDAO;
+import dao.ParadaDAO;
 import modelo.Tramo;
 import net.datastructures.Entry;
 import net.datastructures.Map;
 import net.datastructures.TreeMap;
 import modelo.Parada;
 
-public class TramoSecuencialDAO implements ListaDAO {
+public class TramoSecuencialDAO implements TramoDAO {
 
 	private List<Tramo> listaTramos;
 	private String nombre;
@@ -86,16 +86,14 @@ public class TramoSecuencialDAO implements ListaDAO {
 	}
 
 	@Override
-	public void insertar(Object objeto) {
-		Tramo tramo = (Tramo) objeto;
+	public void insertar(Tramo tramo) {
 		listaTramos.add(tramo);
 		writeToFile(listaTramos, nombre);
 		actualizar = true;
 	}
 
 	@Override
-	public void actualizar(Object objeto) {
-		Tramo tramo = (Tramo) objeto;
+	public void actualizar(Tramo tramo) {
 		int pos = listaTramos.indexOf(tramo);
 		listaTramos.set(pos, tramo);
 		writeToFile(listaTramos, nombre);
@@ -103,8 +101,7 @@ public class TramoSecuencialDAO implements ListaDAO {
 	}
 
 	@Override
-	public void borrar(Object objeto) {
-		Tramo tramo = (Tramo) objeto;
+	public void borrar(Tramo tramo) {
 		listaTramos.remove(tramo);
 		writeToFile(listaTramos, nombre);
 		actualizar = true;
@@ -121,7 +118,7 @@ public class TramoSecuencialDAO implements ListaDAO {
 
 	private Hashtable<String, Parada> cargarParadas() {
 		Hashtable<String, Parada> paradas = new Hashtable<String, Parada>();
-		MapaDAO<String, Parada> paradasDAO = new ParadaSecuencialDAO();
+		ParadaDAO paradasDAO = new ParadaSecuencialDAO();
 		Map<String,Parada> ds = paradasDAO.buscarTodos();
 		for (Entry<String,Parada> iter : ds.entrySet()){
 			paradas.put(iter.getValue().getId(), iter.getValue());			

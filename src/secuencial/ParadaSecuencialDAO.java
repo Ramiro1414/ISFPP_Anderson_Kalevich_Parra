@@ -10,15 +10,14 @@ import java.util.Hashtable;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
-
-import dao.MapaDAO;
+import dao.ParadaDAO;
 import modelo.Linea;
 import modelo.Parada;
 import net.datastructures.TreeMap;
 import net.datastructures.Entry;
 import net.datastructures.Map;
 
-public class ParadaSecuencialDAO implements MapaDAO {
+public class ParadaSecuencialDAO implements ParadaDAO {
 
 	private Hashtable<String, Linea> lineas;
 	private TreeMap<String, Parada> mapaParadas;
@@ -26,7 +25,7 @@ public class ParadaSecuencialDAO implements MapaDAO {
 	private boolean actualizar;
 
 	public ParadaSecuencialDAO() {
-		lineas = cargarLineas();
+		// lineas = cargarLineas();
 		ResourceBundle rb = ResourceBundle.getBundle("config");
 		nombre = rb.getString("parada");
 		actualizar = true;
@@ -67,7 +66,7 @@ public class ParadaSecuencialDAO implements MapaDAO {
 		Formatter outFile = null;
 		try {
 			outFile = new Formatter(nombreArchivo);
-			for (Entry<String,Parada> iter : mapaParadas.entrySet()) {
+			for (Entry<String, Parada> iter : mapaParadas.entrySet()) {
 				outFile.format("%s;%s;\n", iter.getValue().getId(), iter.getValue().getDireccion());
 			}
 		} catch (FileNotFoundException fileNotFoundException) {
@@ -81,31 +80,27 @@ public class ParadaSecuencialDAO implements MapaDAO {
 	}
 
 	@Override
-	public void insertar(Object objeto) {
-		Parada parada = (Parada) objeto;
+	public void insertar(Parada parada) {
 		mapaParadas.put(parada.getId(), parada);
 		writeToFile(mapaParadas, nombre);
 		actualizar = true;
 	}
 
 	@Override
-	public void actualizar(Object objeto) {
-		Parada paradaNueva = (Parada) objeto;
+	public void actualizar(Parada parada) {
+		Parada paradaNueva = parada;
 		Parada paradaVieja = mapaParadas.get(paradaNueva.getId());
 		if (paradaVieja == null) {
-			throw new ParadaInexistenteException ("Esta parada no existe! " + paradaNueva);
-		}
-		else {
-			mapaParadas.put(paradaNueva.getId(), paradaNueva);			
+			throw new ParadaInexistenteException("Esta parada no existe! " + paradaNueva);
+		} else {
+			mapaParadas.put(paradaNueva.getId(), paradaNueva);
 			writeToFile(mapaParadas, nombre);
-			actualizar = true;			
+			actualizar = true;
 		}
 	}
 
-
 	@Override
-	public void borrar(Object objeto) {
-		Parada parada = (Parada) objeto;
+	public void borrar(Parada parada) {
 		mapaParadas.remove(parada.getId());
 		writeToFile(mapaParadas, nombre);
 		actualizar = true;
@@ -123,12 +118,18 @@ public class ParadaSecuencialDAO implements MapaDAO {
 	private Hashtable<String, Linea> cargarLineas() {
 		Map<String, Linea> ds = new TreeMap<String, Linea>();
 		Hashtable<String, Linea> lineas = new Hashtable<String, Linea>();
-		MapaDAO<String,Linea> lineaDAO = new LineaSecuencialDAO();
+		
+		//@SuppressWarnings("unchecked")
+		//MapaDAO<String, Linea> lineaDAO = new LineaSecuencialDAO();
+
+		LineaSecuencialDAO lineaDAO = new LineaSecuencialDAO();
 		ds = lineaDAO.buscarTodos();
-		for (Entry<String,Linea> iter : ds.entrySet()){
+		for (Entry<String, Linea> iter : ds.entrySet()) {
 			lineas.put(iter.getValue().getId(), iter.getValue());
 		}
 		return lineas;
 	}
 
+	
+	
 }

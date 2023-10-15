@@ -8,8 +8,9 @@ import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.Formatter;
 import java.util.FormatterClosedException;
+import java.util.Hashtable;
 
-import dao.MapaDAO;
+import dao.LineaDAO;
 import modelo.Linea;
 import modelo.Parada;
 import net.datastructures.Map;
@@ -17,21 +18,24 @@ import net.datastructures.TreeMap;
 import net.datastructures.Entry;
 import net.datastructures.LinkedPositionalList;
 
-public class LineaSecuencialDAO implements MapaDAO {
+public class LineaSecuencialDAO implements LineaDAO {
 
 	private String nombre;
 	private boolean actualizar;
 	private TreeMap<String, Linea> mapaLineas;
+	private Hashtable<String, Parada> mapaParadas;
 
 	public LineaSecuencialDAO() {
+		
+		this.mapaParadas = cargarParadas();
 		ResourceBundle rb = ResourceBundle.getBundle("config");
 		this.nombre = rb.getString("linea");
 		actualizar = true;
 	}
 
-	public Map<String, Linea> readFromFile(TreeMap<String, Parada> paradas, String nombreArchivo) {
+	private TreeMap<String, Linea> readFromFile(Hashtable<String, Parada> paradas, String nombreArchivo) {
 
-		Map<String, Linea> mapaLineas = new TreeMap<String, Linea>();
+		TreeMap<String, Linea> mapaLineas = new TreeMap<String, Linea>();
 
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(nombreArchivo));
@@ -89,43 +93,19 @@ public class LineaSecuencialDAO implements MapaDAO {
 	}
 
 	private void writeToFile(TreeMap<String, Linea> mapaLineas, String nombreArchivo) {
+
 		Formatter outFile = null;
+
 		try {
 			String textoArchivo;
 
 			outFile = new Formatter(nombreArchivo);
+
 			for (Entry<String, Linea> e : mapaLineas.entrySet()) {
-				
-				for (int i = 1; i <= 6; i++) {
-
-					/*
-					 * String idLinea = "L" + i;
-					 * 
-					 * // L1;I; if (e.getKey() == idLinea) { textoArchivo += e.getValue().getId() +
-					 * ";" + "I;"; }
-					 */
-
-					String idLinea = "L" + i;
-					String tipo = "I"; // O "R" según sea necesario
-
-					String textoArchivo = idLinea + ";" + tipo;
-
-					if (mapaLineas.containsKey(idLinea)) {
-						Linea linea = mapaLineas.get(idLinea);
-						String[] paradas = linea.getParadas().split(";"); // Supongamos que las paradas están separadas
-																			// por punto y coma
-
-						for (String parada : paradas) {
-							textoArchivo += ";" + parada;
-						}
-
-						outFile.format("%s\n", textoArchivo);
-					}
-
-				}
-
-				outFile.format("%s;%s;\n", e.getValue().getId(), e.getNombre());
+				outFile.format("%s;%s%s\n", e.getValue().getId(), "I", e.getValue().listarParadasIda());
+				outFile.format("%s;%s%s\n", e.getValue().getId(), "R", e.getValue().listarParadasRegreso());
 			}
+
 		} catch (FileNotFoundException fileNotFoundException) {
 			System.err.println("Error creating file.");
 		} catch (FormatterClosedException formatterClosedException) {
@@ -137,42 +117,49 @@ public class LineaSecuencialDAO implements MapaDAO {
 	}
 
 	@Override
-	public void insertar(Object objeto) {
-		Linea linea = (Linea) objeto;
+	public void insertar(Linea linea) {
 		mapaLineas.put(linea.getId(), linea);
 		writeToFile(mapaLineas, nombre);
 		actualizar = true;
 	}
 
 	@Override
-	public void actualizar(Object objeto) {
-		Linea lineaNueva = (Linea) objeto;
-		Linea lineaVieja = mapaLineas.get(lineaNueva.getId());
+	public void actualizar(Linea linea) {
+		Linea lineaVieja = mapaLineas.get(linea.getId());
 		if (lineaVieja == null) {
-			throw new LineaInexistenteException ("Esta linea no existe! " + lineaNueva);
-		}
-		else {
-			mapaLineas.put(lineaNueva.getId(), lineaNueva);			
+			return;
+			// throw new LineaExisteException(); -- REVISAR
+		} else {
+			mapaLineas.put(linea.getId(), lineaVieja);
 			writeToFile(mapaLineas, nombre);
-			actualizar = true;			
+			actualizar = true;
 		}
 	}
 
 	@Override
-	public void borrar(Object objeto) {
-		Linea linea = (Linea) objeto;
+	public void borrar(Linea linea) {
 		mapaLineas.remove(linea.getId());
 		writeToFile(mapaLineas, nombre);
 		actualizar = true;
 	}
 
 	@Override
-	public Map<String, Linea> buscarTodos() {
+	public TreeMap<String, Linea> buscarTodos() {
 		if (actualizar) {
-			mapaLineas = readFromFile(nombre);
+			mapaLineas = readFromFile(mapaParadas, nombre);
 			actualizar = false;
 		}
 		return mapaLineas;
+	}
+	
+	private Hashtable<String, Parada> cargarParadas() {
+		Hashtable<String, Parada> paradas = new Hashtable<String, Parada>();
+		ParadaSecuencialDAO paradasDAO = new ParadaSecuencialDAO();
+		Map<String,Parada> ds = paradasDAO.buscarTodos();
+		for (Entry<String,Parada> iter : ds.entrySet()){
+			paradas.put(iter.getValue().getId(), iter.getValue());			
+		}
+		return paradas;
 	}
 
 }

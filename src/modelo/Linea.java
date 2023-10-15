@@ -65,6 +65,22 @@ public class Linea {
 		return paradasRegreso.remove(parada); 
 	}
 
+	public String listarParadasIda(){
+		String paradas = null;
+		for (Parada parada : paradasIda){
+			paradas += ";" + parada.getId();
+		}
+		return paradas;
+	}
+
+	public String listarParadasRegreso(){
+		String paradas = null;
+		for (Parada parada : paradasRegreso){
+			paradas += ";" + parada.getId();
+		}
+		return paradas;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, paradasIda, paradasRegreso);
