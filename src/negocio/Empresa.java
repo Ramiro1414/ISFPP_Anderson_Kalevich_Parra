@@ -1,27 +1,21 @@
 package negocio;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.datastructures.List;
 
 import modelo.Parada;
 import modelo.Linea;
 import modelo.Tramo;
 import negocio.Empresa;
+
 import net.datastructures.Map;
-import net.datastructures.TreeMap;
-import servicio.ParadaServicioImpl;
-import servicio.TramoServicio;
-import servicio.LineaServicio;
-import servicio.LineaServicioImpl;
-import servicio.ParadaServicio;
-import servicio.TramoServicioImpl;
-import modelo.Parada;
+import net.datastructures.ArrayList;
+import net.datastructures.List;
+
 import servicio.ParadaServicioImpl;
 import servicio.LineaServicioImpl;
+import servicio.ListaServicio;
+import servicio.MapaServicio;
 import servicio.TramoServicioImpl;
-
-
-import secuencial.LineaExisteException;
 
 public class Empresa {
 
@@ -29,11 +23,11 @@ public class Empresa {
 
 	private String nombre;
 	private Map<String, Linea> lineas;
-	private LineaServicio lineasServicio;
+	private MapaServicio lineasServicio;
 	private Map<String, Parada> paradas;
-	private ParadaServicio paradasServicio;
+	private MapaServicio paradasServicio;
 	private List<Tramo> tramos;
-	private TramoServicio tramoServicio;
+	private ListaServicio tramosServicio;
 
 	public static Empresa getEmpresa() {
 		if (empresa == null) {
@@ -47,14 +41,15 @@ public class Empresa {
 		paradasServicio = new ParadaServicioImpl();
 		paradas = paradasServicio.buscarTodos();
 		lineasServicio = new LineaServicioImpl();
-		lineas = lineasServicio.buscarTodos();
-		tramoServicio = new TramoServicioImpl();
-		tramos = tramoServicio.buscarTodos();
+		lineas = lineasServicio.buscarTodos();		
+		tramosServicio = new TramoServicioImpl();
+		tramos = tramosServicio.buscarTodos();
 	}
 
+	// Lineas
 	public void agregarLinea(Linea linea) throws LineaExisteException {
 		if (lineas.get(linea.getId()) != null)
-			throw new LineaExisteException();
+			throw new LineaExisteException("Esta linea ya existe! " + linea);
 		lineas.put(linea.getId(), linea);
 		lineasServicio.insertar(linea);		
 	}
@@ -74,7 +69,54 @@ public class Empresa {
 	public Linea buscarLinea(Linea linea) {
 		return lineas.get(linea.getId());
 	}
+	
+	// Paradas
+	public void agregarParada(Parada parada) {
+		if (paradas.get(parada.getId()) != null)
+			//
+		paradas.put(parada.getId(), parada);
+		paradasServicio.insertar(parada);		
+	}
 
+	public void modificarParada(Parada parada) {
+		if (paradas.get(parada.getId()) != null)
+			paradas.put(parada.getId(), parada);			
+		paradasServicio.actualizar(parada);		
+	}
+
+	public void borrarParada(Parada parada) {
+		Parada emp = buscarParada(parada);
+		paradas.remove(emp.getId());
+		paradasServicio.borrar(parada);		
+	}
+
+	public Parada buscarParada(Parada parada) {
+		return paradas.get(parada.getId());
+	}
+	
+	// Tramos
+	public void agregarTramo(Tramo tramo) throws TramoExisteException {
+		if (tramos.contains(tramo))
+			throw new TramoExisteException("Este tramo ya existe! " + tramo);
+		tramos.add(tramos.size(), tramo);
+		tramosServicio.insertar(tramo);	
+	}
+
+	public void modificarTramo(Tramo tramo) {
+		if (tramos.contains(tramo))
+			tramos.set(tramos.indexOf(tramo), tramo);
+		tramosServicio.actualizar(tramo);		
+	}
+
+	public void borrarTramo(Tramo tramo) {
+		tramos.remove(tramo);
+		tramosServicio.borrar(tramo);		
+	}
+
+	public Tramo buscarTramo(Tramo tramo) {
+		return tramos.search(tramo);
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}

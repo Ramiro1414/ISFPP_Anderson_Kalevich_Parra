@@ -1,28 +1,28 @@
 package servicio;
 
+import dao.MapaDAO;
 import secuencial.LineaSecuencialDAO;
-import dao.LineaDAO;
 import modelo.Linea;
 import net.datastructures.Map;
 
-public class LineaServicioImpl implements LineaServicio{
+public class LineaServicioImpl implements MapaServicio{
 
-	private LineaDAO lineaDAO; 
+	private MapaDAO lineaDAO; 
 		
 	public LineaServicioImpl(){
 		lineaDAO = new LineaSecuencialDAO();
 	}
 	
-	public void insertar(Linea linea) {
-		lineaDAO.insertar(linea);				
+	public void insertar(Object objeto) {
+		lineaDAO.insertar(objeto);				
 	}
 
-	public void actualizar(Linea linea) {
-		lineaDAO.actualizar(linea);						
+	public void actualizar(Object objeto) {
+		lineaDAO.actualizar(objeto);						
 	}
 
-	public void borrar(Linea linea) {
-		lineaDAO.borrar(linea);
+	public void borrar(Object objeto) {
+		lineaDAO.borrar(objeto);
 		
 	}
 

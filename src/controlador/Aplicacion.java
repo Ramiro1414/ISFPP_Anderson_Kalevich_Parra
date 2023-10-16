@@ -1,22 +1,18 @@
 package controlador;
 
-import modelo.*;
-import datos.*;
+import modelo.Parada;
+import modelo.Tramo;
+
 import interfaz.Interfaz;
 import negocio.Calculo;
 import negocio.Empresa;
-import net.datastructures.TreeMap;
 
-import java.io.IOException;
-import java.util.List;
+import net.datastructures.List;
 
 import java.util.Scanner;
 
-import secuencial.*;
-import controlador.Coordinador;
-
 public class Aplicacion {
-
+	
 	// logica
 	private Empresa empresa;
 	private Calculo calculo;
@@ -31,6 +27,9 @@ public class Aplicacion {
 		
 		Aplicacion miAplicacion = new Aplicacion();
 		miAplicacion.iniciar();
+		
+		// miAplicacion.prueba();
+		
 		miAplicacion.consultar();
 		
 	}
@@ -50,7 +49,7 @@ public class Aplicacion {
 		coordinador.setEmpresa(empresa);
 		coordinador.setCalculo(calculo);
 
-		calculo.iniciarCalculo(coordinador.listarParadas(), coordinador.listarTramos());
+		calculo.iniciarCalculo(coordinador.listarParadas(), coordinador.listarTramos(), coordinador.listarLineas());
 	}
 	
 	public void consultar(){
@@ -72,6 +71,18 @@ public class Aplicacion {
 		System.out.println("Finish");
 		scanner.close();
 
+	}
+	
+	public void prueba() {
+		
+		Parada nuevaParada = new Parada("98", "a");
+		
+		empresa.agregarParada(nuevaParada);
+		
+	}
+	
+	public void prueba2() {
+		
 	}
 
 }

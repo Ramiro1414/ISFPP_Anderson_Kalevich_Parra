@@ -1,7 +1,8 @@
 package modelo;
 
 import java.util.Objects;
-import net.datastructures.*;
+import net.datastructures.LinkedPositionalList;
+import net.datastructures.Position;
 
 /**
  * Esta clase representa una parada de colectivo y contiene la información

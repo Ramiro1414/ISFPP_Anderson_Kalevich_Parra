@@ -84,4 +84,12 @@ public interface List<E> extends Iterable<E> {
    * @return iterator of the list's elements
    */
   Iterator<E> iterator();
+  
+  int indexOf(E objeto);
+  
+  boolean remove(E objeto);
+  
+  boolean contains(E objeto);
+  
+  E search(E objeto);
 }

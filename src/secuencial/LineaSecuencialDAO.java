@@ -3,14 +3,12 @@ package secuencial;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.BufferedReader;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.Formatter;
 import java.util.FormatterClosedException;
 import java.util.Hashtable;
-
-import dao.LineaDAO;
+import dao.MapaDAO;
 import modelo.Linea;
 import modelo.Parada;
 import net.datastructures.Map;
@@ -18,7 +16,7 @@ import net.datastructures.TreeMap;
 import net.datastructures.Entry;
 import net.datastructures.LinkedPositionalList;
 
-public class LineaSecuencialDAO implements LineaDAO {
+public class LineaSecuencialDAO implements MapaDAO {
 
 	private String nombre;
 	private boolean actualizar;
@@ -97,7 +95,6 @@ public class LineaSecuencialDAO implements LineaDAO {
 		Formatter outFile = null;
 
 		try {
-			String textoArchivo;
 
 			outFile = new Formatter(nombreArchivo);
 
@@ -116,19 +113,18 @@ public class LineaSecuencialDAO implements LineaDAO {
 		}
 	}
 
-	@Override
-	public void insertar(Linea linea) {
+	public void insertar(Object objeto) {
+		Linea linea = (Linea) objeto;
 		mapaLineas.put(linea.getId(), linea);
 		writeToFile(mapaLineas, nombre);
 		actualizar = true;
 	}
 
-	@Override
-	public void actualizar(Linea linea) {
+	public void actualizar(Object objeto) {
+		Linea linea = (Linea) objeto;
 		Linea lineaVieja = mapaLineas.get(linea.getId());
 		if (lineaVieja == null) {
-			return;
-			// throw new LineaExisteException(); -- REVISAR
+			throw new LineaInexistenteException();
 		} else {
 			mapaLineas.put(linea.getId(), lineaVieja);
 			writeToFile(mapaLineas, nombre);
@@ -136,14 +132,13 @@ public class LineaSecuencialDAO implements LineaDAO {
 		}
 	}
 
-	@Override
-	public void borrar(Linea linea) {
+	public void borrar(Object objeto) {
+		Linea linea = (Linea) objeto;
 		mapaLineas.remove(linea.getId());
 		writeToFile(mapaLineas, nombre);
 		actualizar = true;
 	}
 
-	@Override
 	public TreeMap<String, Linea> buscarTodos() {
 		if (actualizar) {
 			mapaLineas = readFromFile(mapaParadas, nombre);

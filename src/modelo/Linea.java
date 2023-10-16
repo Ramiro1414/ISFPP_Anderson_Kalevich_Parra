@@ -2,7 +2,8 @@ package modelo;
 
 import java.util.Objects;
 
-import net.datastructures.*;
+import net.datastructures.LinkedPositionalList;
+import net.datastructures.Position;
 
 /**
  * Esta clase representa una línea de colectivo y contiene la información
@@ -79,6 +80,17 @@ public class Linea {
 			paradas += ";" + parada.getId();
 		}
 		return paradas;
+	}
+	
+	public boolean contieneParada(Parada parada) {
+		
+		if (paradasIda.contains(parada))
+			return true;
+		
+		if (paradasRegreso.contains(parada))
+			return true;
+		
+		return false;
 	}
 
 	@Override

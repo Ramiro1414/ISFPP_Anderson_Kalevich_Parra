@@ -4,27 +4,28 @@ import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.Formatter;
 import java.util.FormatterClosedException;
-import java.util.Hashtable;
-import java.util.List;
+//import java.util.List;
+import net.datastructures.List;
+import net.datastructures.ArrayList;
+
 import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 import java.util.Scanner;
-import java.util.ArrayList;
 
-import secuencial.ParadaSecuencialDAO;
-import dao.TramoDAO;
-import dao.ParadaDAO;
+
+import net.datastructures.ProbeHashMap;
+import dao.ListaDAO;
+import dao.MapaDAO;
 import modelo.Tramo;
 import net.datastructures.Entry;
 import net.datastructures.Map;
-import net.datastructures.TreeMap;
 import modelo.Parada;
 
-public class TramoSecuencialDAO implements TramoDAO {
+public class TramoSecuencialDAO implements ListaDAO {
 
 	private List<Tramo> listaTramos;
 	private String nombre;
-	private Hashtable<String, Parada> paradas;
+	private ProbeHashMap<String, Parada> paradas;
 	private boolean actualizar;
 
 	public TramoSecuencialDAO() {
@@ -47,7 +48,7 @@ public class TramoSecuencialDAO implements TramoDAO {
 				p2 = paradas.get(read.next());
 				tiempo = read.nextInt();
 				tipo = read.nextInt();
-				listaTramos.add(new Tramo(p1, p2, tiempo, tipo));
+				listaTramos.add(listaTramos.size(), new Tramo(p1, p2, tiempo, tipo));
 			}
 			read.close();
 		} catch (FileNotFoundException fileNotFoundException) {
@@ -86,14 +87,16 @@ public class TramoSecuencialDAO implements TramoDAO {
 	}
 
 	@Override
-	public void insertar(Tramo tramo) {
-		listaTramos.add(tramo);
+	public void insertar(Object objeto) {
+		Tramo tramo = (Tramo) objeto;
+		listaTramos.add(0, tramo);
 		writeToFile(listaTramos, nombre);
 		actualizar = true;
 	}
 
 	@Override
-	public void actualizar(Tramo tramo) {
+	public void actualizar(Object objeto) {
+		Tramo tramo = (Tramo) objeto;
 		int pos = listaTramos.indexOf(tramo);
 		listaTramos.set(pos, tramo);
 		writeToFile(listaTramos, nombre);
@@ -101,7 +104,8 @@ public class TramoSecuencialDAO implements TramoDAO {
 	}
 
 	@Override
-	public void borrar(Tramo tramo) {
+	public void borrar(Object objeto) {
+		Tramo tramo = (Tramo) objeto;
 		listaTramos.remove(tramo);
 		writeToFile(listaTramos, nombre);
 		actualizar = true;
@@ -116,9 +120,9 @@ public class TramoSecuencialDAO implements TramoDAO {
 		return listaTramos;
 	}
 
-	private Hashtable<String, Parada> cargarParadas() {
-		Hashtable<String, Parada> paradas = new Hashtable<String, Parada>();
-		ParadaDAO paradasDAO = new ParadaSecuencialDAO();
+	private ProbeHashMap<String, Parada> cargarParadas() {
+		ProbeHashMap<String, Parada> paradas = new ProbeHashMap<String, Parada>();
+		MapaDAO paradasDAO = new ParadaSecuencialDAO();
 		Map<String,Parada> ds = paradasDAO.buscarTodos();
 		for (Entry<String,Parada> iter : ds.entrySet()){
 			paradas.put(iter.getValue().getId(), iter.getValue());			

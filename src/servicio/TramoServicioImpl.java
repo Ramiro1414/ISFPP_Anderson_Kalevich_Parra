@@ -2,28 +2,31 @@ package servicio;
 
 import secuencial.TramoSecuencialDAO;
 
-import java.util.List;
-import dao.TramoDAO;
+// import java.util.List;
+
+import net.datastructures.List;
+
+import dao.ListaDAO;
 import modelo.Tramo;
 
-public class TramoServicioImpl implements TramoServicio {
+public class TramoServicioImpl implements ListaServicio {
 
-	private TramoDAO tramoDAO; 
+	private ListaDAO tramoDAO; 
 		
 	public TramoServicioImpl(){
 		tramoDAO = new TramoSecuencialDAO();
 	}
 	
-	public void insertar(Tramo tramo) {
-		tramoDAO.insertar(tramo);				
+	public void insertar(Object objeto) {
+		tramoDAO.insertar(objeto);				
 	}
 	
-	public void actualizar(Tramo tramo) {
-		tramoDAO.actualizar(tramo);						
+	public void actualizar(Object objeto) {
+		tramoDAO.actualizar(objeto);						
 	}
 
-	public void borrar(Tramo tramo) {
-		tramoDAO.borrar(tramo);
+	public void borrar(Object objeto) {
+		tramoDAO.borrar(objeto);
 		
 	}
 

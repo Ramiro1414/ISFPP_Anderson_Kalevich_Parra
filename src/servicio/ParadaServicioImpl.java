@@ -1,29 +1,29 @@
 package servicio;
 
-import dao.ParadaDAO;
+import dao.MapaDAO;
 import modelo.Parada;
 import net.datastructures.Map;
 
 import secuencial.ParadaSecuencialDAO;
 
-public class ParadaServicioImpl implements ParadaServicio{
+public class ParadaServicioImpl implements MapaServicio{
 
-	private ParadaDAO paradaDAO;
+	private MapaDAO paradaDAO;
 
 	public ParadaServicioImpl (){
 		paradaDAO = new ParadaSecuencialDAO();
 	}
 	
-	public void insertar(Parada parada) {
-		paradaDAO.insertar(parada);
+	public void insertar(Object objeto) {
+		paradaDAO.insertar(objeto);
 	}
 
-	public void actualizar(Parada parada) {
-		paradaDAO.actualizar(parada);
+	public void actualizar(Object objeto) {
+		paradaDAO.actualizar(objeto);
 	}
 
-	public void borrar(Parada parada) {
-		paradaDAO.borrar(parada);
+	public void borrar(Object objeto) {
+		paradaDAO.borrar(objeto);
 	}
 
 	public Map<String, Parada> buscarTodos() {

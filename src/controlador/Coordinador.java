@@ -4,7 +4,7 @@ import negocio.Calculo;
 import negocio.Empresa;
 import net.datastructures.Map;
 
-import java.util.List;
+import net.datastructures.List;
 
 import interfaz.Interfaz;
 import modelo.Linea;

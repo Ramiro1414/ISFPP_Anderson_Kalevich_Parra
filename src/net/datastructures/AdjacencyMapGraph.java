@@ -196,6 +196,15 @@ public class AdjacencyMapGraph<V,E> implements Graph<V,E> {
     if (!edge.validate(this)) throw new IllegalArgumentException("Invalid edge");
     return edge;
   }
+  
+  public Vertex<V> getVertex(V element) {
+    for (Vertex<V> vertex : vertices) {
+        if (vertex.getElement().equals(element)) {
+            return vertex;
+        }
+    }
+    return null;
+}
 
   //---------------- nested Vertex class ----------------
   /** A vertex of an adjacency map graph representation. */
